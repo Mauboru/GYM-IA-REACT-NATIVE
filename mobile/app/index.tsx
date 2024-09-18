@@ -1,5 +1,5 @@
 import { View, Text, Image, StyleSheet, Pressable } from 'react-native'
-import { Colors } from '../constants/colors'
+import { colors } from '../constants/colors'
 import { Link } from 'expo-router'
 
 export default function Index(){
@@ -9,7 +9,7 @@ export default function Index(){
         source={require('../assets/images/logo.png')}
       />
       <Text style={styles.title}>
-        Dieta<Text style={{ color: Colors.white }}>.IA</Text>
+        Dieta<Text style={{ color: colors.white }}>.IA</Text>
       </Text>
 
       <Text style={styles.text}>
@@ -27,7 +27,7 @@ export default function Index(){
 
 const styles = StyleSheet.create({
   container:{
-    backgroundColor: Colors.background,
+    backgroundColor: colors.background,
     flex: 1,
     justifyContent: 'center',
     alignItems: 'center',
@@ -38,12 +38,12 @@ const styles = StyleSheet.create({
   title:{
     fontSize: 36,
     fontWeight: 'bold',
-    color: Colors.green
+    color: colors.green
   },
 
   text:{
     fontSize: 16,
-    color: Colors.white,
+    color: colors.white,
     width: 240,
     textAlign: 'center',
     marginTop: 8,
@@ -51,7 +51,7 @@ const styles = StyleSheet.create({
   },
 
   button:{
-    backgroundColor: Colors.blue,
+    backgroundColor: colors.blue,
     width: '100%',
     height: 40,
     borderRadius: 4,
@@ -61,7 +61,7 @@ const styles = StyleSheet.create({
   },
 
   buttonText:{
-    color: Colors.white,
+    color: colors.white,
     fontSize: 16,
     fontWeight: 'bold'
   }
