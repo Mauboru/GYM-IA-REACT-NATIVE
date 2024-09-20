@@ -1,0 +1,5 @@
+{
+  "dependencies": {
+    "@react-native-community/cli-platform-android": "^14.1.1"
+  }
+}

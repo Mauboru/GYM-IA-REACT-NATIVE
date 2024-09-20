@@ -1,4 +1,4 @@
-import { View, Text, StyleSheet, Pressable, ScrollView } from 'react-native';
+import { View, Text, StyleSheet, Pressable, ScrollView, Share } from 'react-native';
 import { useDataStore } from '@/store/data';
 import { api } from '@/services/api';
 import { useQuery } from '@tanstack/react-query';
@@ -40,6 +40,21 @@ export default function Nutrition() {
         }
     })
 
+    async function handleShare(){
+        try {
+            if (data && Object.keys(data).length === 0) return;
+            const supplements = `${data?.suplementos.map(item => ` ${item}`)}`
+            const foods = `${data?.refeicoes.map(item => `\n- Nome: ${item.nome}\n- Horário: ${item.horario}\n-Alimentos: ${item.alimentos.map(alimento => `${alimento}`)}`)}`
+            const message = `Dieta: ${data?.nome} - Objetivo: ${data?.objetivo}\n\n${foods}\n\n- Dica Suplementos: ${supplements}`
+        
+            await Share.share({
+                message: message
+            })
+        } catch (error) {
+            console.log(error);
+        }
+    }
+
     if(isFetching){
         return(
             <View style={styles.loading}>
@@ -63,7 +78,7 @@ export default function Nutrition() {
             <View style={styles.containerHeader}>
                 <View style={styles.contentHeader}>
                     <Text style={styles.title}>Minha Dieta</Text>
-                    <Pressable style={styles.buttonShare}>
+                    <Pressable style={styles.buttonShare} onPress={handleShare}>
                         <Text style={styles.buttonShareText}>Compartilhar</Text>
                     </Pressable>
                 </View>
