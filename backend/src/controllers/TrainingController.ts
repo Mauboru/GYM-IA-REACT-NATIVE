@@ -3,9 +3,9 @@ import { TrainingService } from '../services/TrainingService'
 
 export interface DataProps{
     name: String,
-    weight: String,
-    height: String,
-    age: String,
+    weight: number,
+    height: number,
+    age: number,
     gender: String,
     objective: String,
     level: String,

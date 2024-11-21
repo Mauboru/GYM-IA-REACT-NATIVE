@@ -5,7 +5,7 @@ class TrainingService {
     async execute({ name, weight, height, age, gender, objective, level, modal }: DataProps){
         try {
             const genAI = new GoogleGenerativeAI(process.env.API_KEY!);
-            const model = genAI.getGenerativeModel({ model: "gemini-1.5-flash" })
+            const model = genAI.getGenerativeModel({ model: "gemini-1.5-flash" });
 
             const response = await model.generateContent(`
                 Crie uma rotina de treino completa para uma pessoa com nome: ${name} 
@@ -13,28 +13,34 @@ class TrainingService {
                 com peso atual: ${weight}kg, 
                 altura: ${height}, 
                 idade: ${age} anos e com foco e objetivo em ${objective}, 
-                atualmente nível de atividade: ${level} e que ira treinar na modalidade: ${modal}
-                e ignore qualquer outro parametro que não seja os passados, 
-                retorne em json com as respectivas propriedades, 
-                propriedade nome o nome da pessoa, propriedade sexo com sexo, propriedade idade, 
-                propriedade altura, propriedade peso, propriedade objetivo com o objetivo atual, 
-                propriedade treinos com uma array contendo dentro cada objeto sendo 
-                um treino por dia e dentro de cada treino a propriedade modelo seja academia ou calistenia, 
-                propriedade nome com nome e a propriedade treinos com array contendo os treinos 
-                dessa refeição e pode incluir uma propreidade como suplementos contendo array com 
-                sugestão de suplemento que é indicado para o sexo dessa pessoa e o objetivo dela e 
-                não retorne nenhuma observação alem das passadas no prompt, 
-                retorne em json e nenhuma propriedade pode ter acento.`);
+                atualmente nível de atividade: ${level} e que irá treinar na modalidade: ${modal}.
+                Certifique-se de que o JSON esteja bem formatado e válido conforme as regras JSON.
+            `);
             
-            console.log(JSON.stringify(response, null, 2))
+            console.log(JSON.stringify(response, null, 2));
 
             if (response.response && response.response.candidates) {
                 const jsonText = response.response.candidates[0]?.content.parts[0].text as string;
-                let jsonString = jsonText.replace(/```\w*\n/g, '').replace(/\n```/g, '').trim();
-                let jsonObject = JSON.parse(jsonString);
-                return ({ data: jsonObject })
+
+                let jsonString = jsonText
+                .replace(/```json\n/g, '') // Remove ```json no início
+                .replace(/\n```/g, '')     // Remove ``` no final
+                .replace(/\n/g, '')        // Remove quebras de linha extras
+                .replace(/“|”/g, '"')      // Substitui aspas estilizadas por aspas normais
+                .replace(/(\d+)-(\d+)/g, '"$1-$2"');
+
+                console.log("JSON retornado pela API: ", jsonString);
+
+                try {
+                    let jsonObject = JSON.parse(jsonString); // Faz o parsing do JSON limpo
+                    return { data: jsonObject };
+                } catch (err) {
+                    console.log('Erro ao analisar JSON:', err);
+                    throw new Error('Falha ao analisar o JSON.');
+                }
             }
-            return { ok: true}  
+
+            return { ok: true };  
         } catch (error) {
             console.log("Error no JSON: ", error);
             throw new Error("Failed Create");
@@ -42,4 +48,4 @@ class TrainingService {
     }
 }
 
-export { TrainingService }
+export { TrainingService };
